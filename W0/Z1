@@ -1,0 +1,30 @@
+1. 42_8      -> 100010_2           ->   22_16    -> 34_10
+   255_8     -> 10101101_2         ->   AD_16    -> 173_10
+   3047_8    -> 011000100111_2     ->   627_16   -> 1575_10
+   140336_8  -> 1100000011011110_2 ->   C0DE_16  -> 49374_10
+
+2. 22_16 + 8+16  = 2A
+   73_16 + 2C_16 = 9F
+   7F_16 + 7F_16 = FE
+   C2_16 + A4_16 = 166
+
+3. x-(1<<k)
+   x | (1<<k)
+   x ^ (1<<k)
+
+4. x << k
+   x >> k
+   x & ((1<<k) - 1)
+   (x >> k) + (x&1)
+
+5. ((x & -x) ^ x)
+
+6. to_BE(int x){   return ((x & 0x000000ff) << 24) | 
+                          ((x & 0x0000ff00) << 8) |
+                          ((x & 0x00ff0000) >> 8) |
+                          ((x & 0xff000000) >> 24);   }
+   little z najmniej znaczącym na początku (x86)
+
+7. kody sterujące - steruje urządzeniem przetwarzającym zamiast przenosić informacji. 
+
+8. 
