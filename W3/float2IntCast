@@ -23,17 +23,16 @@ void pf(union _A X) {
 
 }
 
-// multiplies float by 2^i using integer operations on bits
-int32_t get() {
-    A1.f = 1000000002.4f;
+
+int32_t get(union _A A1) {
 
     int32_t s = (A1.mask >> 31) & 1;
     int32_t e = (A1.mask >> 23) & 0xFF;
     int32_t e2 = e - ((1 << 7) - 1);
     int32_t l = 0;
-    if (e < 0x7F) return 0; // smaller than 1
-    //if (e == 0x7F) return s == 0 ? 1 : -1;
-    if (e2 > 54) return 0x80000000;
+    if (e2 < 0) return 0; // smaller than 1
+    ///if (e == 0x7F) return s == 0 ? 1 : -1;
+    if (e2 >= 55) return 0x80000000;
     if (e2 >= 0) {
         int32_t shift = 23 - e2;
         l = 0x800000 | A1.mask & 0xFFFFFF;
@@ -45,13 +44,35 @@ int32_t get() {
     if (s)
         l = -l;
     return l;
+}
 
+
+int32_t get2(union _A A1) {
+
+    int x = A1.mask;
+
+    int e2 = ((x>>23)&0xFF)-127;
+    int shiftR = 23-e2;
+    int shiftL = -shiftR;
+    shiftR &= ~shiftR>>31;
+    shiftL &= ~shiftL>>31;
+    int l = 0x800000 | x & 0xFFFFFF;
+    l = (l>>shiftR)<<shiftL;
+    l = ((x>>31)&(-l))|((~x>>31)&l);
+    l = (~e2>>31)&l;
+    l = (((e2-55)>>31)&l)|((~(e2-55)>>31)&0x80000000);
+    return l;
 }
 
 int main() {
-    union _A x;
-    x.mask = get();
-    pf(x);
-    printf("%d", x.mask);
+    union _A t;
+    t.f = 123123.1726318276323123123123f;
+    union _A x1, x2;
+    x1.mask = get(t);
+    x2.mask = get2(t);
+    pf(x1);
+    printf("%d\n", x1.mask);
+    pf(x2);
+    printf("%d\n", x2.mask);
     return 0;
 }
