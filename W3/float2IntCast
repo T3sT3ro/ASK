@@ -1,0 +1,57 @@
+//
+// Created by Tooster on 04.03.2018.
+//
+
+#include <cstdint>
+#include <iostream>
+
+union _A {
+    int32_t mask;
+    float f;
+} A1;
+
+void pf(union _A X) {
+    for (int i = 0, j = 0; i < 32; ++i) {
+        printf("%d", X.mask & (1 << (31 - i)) ? 1 : 0);
+        j++;
+        if (j == 8) {
+            printf(" ");
+            j -= 8;
+        }
+    }
+    printf("\n");
+
+}
+
+// multiplies float by 2^i using integer operations on bits
+int32_t get() {
+    A1.f = 1000000002.4f;
+
+    int32_t s = (A1.mask >> 31) & 1;
+    int32_t e = (A1.mask >> 23) & 0xFF;
+    int32_t e2 = e - ((1 << 7) - 1);
+    int32_t l = 0;
+    if (e < 0x7F) return 0; // smaller than 1
+    //if (e == 0x7F) return s == 0 ? 1 : -1;
+    if (e2 > 54) return 0x80000000;
+    if (e2 >= 0) {
+        int32_t shift = 23 - e2;
+        l = 0x800000 | A1.mask & 0xFFFFFF;
+        if (shift > 0)
+            l >>= shift;
+        else
+            l <<= -shift;
+    }
+    if (s)
+        l = -l;
+    return l;
+
+}
+
+int main() {
+    union _A x;
+    x.mask = get();
+    pf(x);
+    printf("%d", x.mask);
+    return 0;
+}
