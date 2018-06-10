@@ -1,15 +1,13 @@
 MT0=0
 MT1=0
-MT2=0
-MT3=0
-for i in {1..5}; do
-	MT0=$(echo $(./matmult -n $1 -v 0 | grep -oP 'Time elapsed: \K([0-9]+\.[0-9]+)' | bc) + $MT0 | bc)
-	MT1=$(echo $(./matmult -n $1 -v 1 | grep -oP 'Time elapsed: \K([0-9]+\.[0-9]+)' | bc) + $MT1 | bc)
-	MT2=$(echo $(./matmult -n $1 -v 2 | grep -oP 'Time elapsed: \K([0-9]+\.[0-9]+)' | bc) + $MT2 | bc)
-	MT3=$(echo $(./matmult -n $1 -v 3 | grep -oP 'Time elapsed: \K([0-9]+\.[0-9]+)' | bc) + $MT3 | bc)
+echo test
+for i in {1..3}
+do
+	s=$RANDOM
+	echo $s
+	MT0=$(echo $(./randwalk -S $s -n 7 -s 16 -t 14 -v 0 | grep -oP 'Time elapsed: \K([0-9]+\.[0-9]+)' | bc) + $MT0 | bc)
+	MT1=$(echo $(./randwalk -S $s -n 7 -s 16 -t 14 -v 1 | grep -oP 'Time elapsed: \K([0-9]+\.[0-9]+)' | bc) + $MT1 | bc)
 done
-MT0=$(echo $MT0 / 10 | bc -l)
-MT1=$(echo $MT1 / 10 | bc -l)
-MT2=$(echo $MT2 / 10 | bc -l)
-MT3=$(echo $MT3 / 10 | bc -l)
-echo $1 $MT0 $MT1 $MT2 $MT3 >> datasheet.dat
+MT0=$(echo $MT0 / 3 | bc -l)
+MT1=$(echo $MT1 / 3 | bc -l)
+echo 3 $MT0 $MT1

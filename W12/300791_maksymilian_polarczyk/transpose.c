@@ -12,7 +12,7 @@
 
 /* You can modify following definitions to try out different settings. */ 
 #define T int 
-#define BLOCK 8
+#define BLOCK 16
 
 static void fill(T *dst, int n) {
   for (int i = 0; i < n; i++)
